@@ -810,12 +810,20 @@ class Collection implements ArrayAccess, Arrayable, Countable, IteratorAggregate
      *
      * @return bool
      */
-    public function isReadable($value)
+    public function isReadable($item)
     {
-        $value = realpath($value);
-        $fileName = basename($value);
+        $fileName;
+
+        if ( strstr($item, '/') || strstr($item, '../') || strstr($item, './') )
+        {
+            $fileName = realpath($item);
+            $fileName = basename($fileName);
+        }
+
+        else $fileName = $item;
 
         $isReadable = false;
+
         $files = new FileSystem;
         $files = $files->allFiles(public_path());
         foreach ($files as $file)

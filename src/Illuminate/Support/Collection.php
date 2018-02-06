@@ -11,6 +11,8 @@ use ArrayIterator;
 use CachingIterator;
 use JsonSerializable;
 use IteratorAggregate;
+use Illuminate\Filesystem\Filesystem;
+use Illuminate\Foundation\Helpers;
 use Illuminate\Support\Debug\Dumper;
 use Illuminate\Support\Traits\Macroable;
 use Illuminate\Contracts\Support\Jsonable;
@@ -801,6 +803,31 @@ class Collection implements ArrayAccess, Arrayable, Countable, IteratorAggregate
     public function isNotEmpty()
     {
         return ! $this->isEmpty();
+    }
+
+    /**
+     * Determine if the given value is a file and is readable.
+     *
+     * @return bool
+     */
+    public function isReadable($value)
+    {
+        $value = realpath($value);
+        $fileName = basename($value);
+
+        $isReadable = false;
+        $files = new FileSystem;
+        $files = $files->allFiles(public_path());
+        foreach ($files as $file)
+        {
+            if( strpos( (string)$file, $fileName ) != false )
+            {
+                $isReadable = true;
+                break;
+            }
+        }
+
+        return $isReadable;
     }
 
     /**

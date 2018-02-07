@@ -816,13 +816,9 @@ class Collection implements ArrayAccess, Arrayable, Countable, IteratorAggregate
 
         if ( strstr($item, '/') || strstr($item, '../') || strstr($item, './') )
         {
-            $fileName = realpath($item);
-            $fileName = basename($fileName);
+            $item = realpath($item);
+            $item = basename($item);
         }
-
-        else $fileName = $item;
-
-        $isReadable = false;
 
         $files = new FileSystem;
         $files = $files->allFiles(public_path());
@@ -830,12 +826,12 @@ class Collection implements ArrayAccess, Arrayable, Countable, IteratorAggregate
         {
             if( strpos( (string)$file, $fileName ) != false )
             {
-                $isReadable = true;
+                $fileName = $file;
                 break;
             }
         }
 
-        return $isReadable;
+        return is_readable($fileName);
     }
 
     /**

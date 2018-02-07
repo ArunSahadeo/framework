@@ -824,7 +824,7 @@ class Collection implements ArrayAccess, Arrayable, Countable, IteratorAggregate
         $files = $files->allFiles(public_path());
         foreach ($files as $file)
         {
-            if( strpos( (string)$file, $fileName ) != false )
+            if( strpos( (string)$file, $item ) != false )
             {
                 $fileName = $file;
                 break;
